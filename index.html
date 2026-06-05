@@ -505,16 +505,7 @@
         </div>
 
         <div class="memories-content locked" id="memoriesContent">
-          <div class="mem-tabs">
-            <button class="mem-tab active" onclick="switchTab('photos',this)">📸 Photos (42)</button>
-            <button class="mem-tab" onclick="switchTab('videos',this)">🎬 Videos (26)</button>
-          </div>
-          <div id="photosTab">
-            <div class="photos-grid" id="photosGrid"></div>
-          </div>
-          <div id="videosTab" style="display:none">
-            <div class="videos-grid" id="videosGrid"></div>
-          </div>
+         <div class="photos-grid" id="mixedGrid"></div>
         </div>
       </div>
 
@@ -666,51 +657,118 @@ function unlockEverything() {
   document.getElementById('memoriesLockBadge').classList.add('hidden');
 
   // Load media from local folders
-  loadPhotos();
-  loadVideos();
+loadMixed();
 }
 
 // ===== LOAD PHOTOS (local files) =====
 function loadPhotos() {
-  const grid = document.getElementById('photosGrid');
-  grid.innerHTML = '';
-  for (let i = 1; i <= PHOTO_COUNT; i++) {
-    const url = PHOTO_PATH + 'img' + i + '.jpg';
-    const frame = document.createElement('div');
-    frame.className = 'photo-frame';
+  window._puzzleImageUrl = PHOTO_PATH + 'img1.png';
+}
 
-    const img = document.createElement('img');
-    img.src = url;
-    img.alt = 'Memory ' + i;
-    img.loading = 'lazy';
-    // On error show a placeholder flower
-    img.onerror = function() {
-      frame.style.background = '#f0c4c4';
-      frame.style.display = 'flex';
-      frame.style.alignItems = 'center';
-      frame.style.justifyContent = 'center';
-      frame.style.fontSize = '28px';
-      this.remove();
-      if (!frame.querySelector('.photo-caption')) {
+function loadVideos() {}
+
+function loadMixed() {
+  const grid = document.getElementById('mixedGrid');
+  grid.innerHTML = '';
+  let photoIdx = 1;
+  let videoIdx = 1;
+  let position = 0;
+
+  while (photoIdx <= PHOTO_COUNT || videoIdx <= VIDEO_COUNT) {
+    // every 4th item (position 3,7,11...) is a video
+    if ((position + 1) % 4 === 0 && videoIdx <= VIDEO_COUNT) {
+      // add video
+      const url = VIDEO_PATH + 'vid' + videoIdx + '.mp4';
+      const thumb = document.createElement('div');
+      thumb.className = 'photo-frame';
+      thumb.style.background = '#2a1a1a';
+
+      const v = document.createElement('video');
+      v.src = url;
+      v.muted = true;
+      v.autoplay = true;
+      v.loop = true;
+      v.playsInline = true;
+      v.preload = 'auto';
+      v.style.cssText = 'width:100%;height:100%;object-fit:cover;display:block;';
+      v.onerror = function() { thumb.style.background = '#2a1a1a'; this.remove(); };
+      thumb.appendChild(v);
+
+      const icon = document.createElement('div');
+      icon.className = 'photo-caption';
+      icon.textContent = '▶ vid' + videoIdx;
+      thumb.appendChild(icon);
+
+      const vUrl = url;
+      thumb.onclick = () => openVideoModal(vUrl);
+      grid.appendChild(thumb);
+      videoIdx++;
+
+    } else if (photoIdx <= PHOTO_COUNT) {
+      // add photo
+      const url = PHOTO_PATH + 'img' + photoIdx + '.png';
+      const frame = document.createElement('div');
+      frame.className = 'photo-frame';
+
+      const img = document.createElement('img');
+      img.src = url;
+      img.alt = 'Memory ' + photoIdx;
+      img.loading = 'lazy';
+      img.onerror = function() {
+        frame.style.background = '#f0c4c4';
+        frame.style.display = 'flex';
+        frame.style.alignItems = 'center';
+        frame.style.justifyContent = 'center';
+        frame.style.fontSize = '28px';
+        this.remove();
         frame.innerHTML = '🌸';
         const cap = document.createElement('div');
         cap.className = 'photo-caption';
-        cap.textContent = 'img' + i;
+        cap.textContent = 'img' + photoIdx;
         frame.appendChild(cap);
-      }
-    };
-    frame.appendChild(img);
+      };
+      frame.appendChild(img);
 
-    const cap = document.createElement('div');
-    cap.className = 'photo-caption';
-    cap.textContent = 'img' + i;
-    frame.appendChild(cap);
+      const cap = document.createElement('div');
+      cap.className = 'photo-caption';
+      cap.textContent = 'img' + photoIdx;
+      frame.appendChild(cap);
 
-    frame.onclick = () => openPhoto(url, 'img' + i);
-    grid.appendChild(frame);
+      const pUrl = url;
+      const pIdx = photoIdx;
+      frame.onclick = () => openPhoto(pUrl, 'img' + pIdx);
+      grid.appendChild(frame);
+      photoIdx++;
+    } else {
+      // only videos left
+      const url = VIDEO_PATH + 'vid' + videoIdx + '.mp4';
+      const thumb = document.createElement('div');
+      thumb.className = 'photo-frame';
+      thumb.style.background = '#2a1a1a';
+
+      const v = document.createElement('video');
+      v.src = url;
+      v.muted = true;
+      v.autoplay = true;
+      v.loop = true;
+      v.playsInline = true;
+      v.preload = 'auto';
+      v.style.cssText = 'width:100%;height:100%;object-fit:cover;display:block;';
+      thumb.appendChild(v);
+
+      const icon = document.createElement('div');
+      icon.className = 'photo-caption';
+      icon.textContent = '▶ vid' + videoIdx;
+      thumb.appendChild(icon);
+
+      const vUrl = url;
+      thumb.onclick = () => openVideoModal(vUrl);
+      grid.appendChild(thumb);
+      videoIdx++;
+    }
+    position++;
   }
-  // Store first image URL for the puzzle
-  window._puzzleImageUrl = PHOTO_PATH + 'img1.jpg';
+  window._puzzleImageUrl = PHOTO_PATH + 'img1.png';
 }
 
 // ===== LOAD VIDEOS (local files) =====
@@ -752,15 +810,6 @@ function loadVideos() {
     grid.appendChild(thumb);
   }
 }
-
-// ===== TABS =====
-function switchTab(tab, btn) {
-  document.querySelectorAll('.mem-tab').forEach(t => t.classList.remove('active'));
-  btn.classList.add('active');
-  document.getElementById('photosTab').style.display = tab === 'photos' ? '' : 'none';
-  document.getElementById('videosTab').style.display = tab === 'videos' ? '' : 'none';
-}
-
 // ===== MODALS =====
 function openLetter() {
   if (!document.getElementById('envelopeWrap').classList.contains('unlocked')) return;
