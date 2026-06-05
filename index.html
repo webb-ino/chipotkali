@@ -773,8 +773,13 @@ function openPhoto(url, caption) {
 function openVideoModal(url) {
   const v = document.getElementById('modalVideo');
   v.src = url;
-  v.play();
+  v.muted = false;
+  v.controls = true;
   document.getElementById('videoModal').classList.add('show');
+  v.play().catch(() => {
+    v.muted = true;
+    v.play();
+  });
 }
 function closeVideoModal() {
   const v = document.getElementById('modalVideo');
