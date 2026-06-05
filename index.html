@@ -111,7 +111,7 @@
     color: var(--red); opacity: .4; align-self: flex-start; padding-top: 4px;
   }
 
-  /* Envelope - locked by default */
+  /* Envelope */
   .envelope-wrap {
     display: flex; flex-direction: column; align-items: center; gap: 10px;
     position: relative;
@@ -144,7 +144,7 @@
   .envelope-wrap.unlocked .envelope-hint { animation: fadeIn .8s ease; }
   @keyframes fadeIn { from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:translateY(0)} }
 
-  /* Memories Section - locked */
+  /* Memories Section */
   .memories-section { width: 100%; }
   .memories-header {
     display: flex; align-items: center; justify-content: center;
@@ -482,7 +482,7 @@
         </div>
       </div>
 
-      <!-- Envelope (locked until timer = 0) -->
+      <!-- Envelope -->
       <div class="envelope-wrap" id="envelopeWrap">
         <div class="envelope-hint">✨ A letter just for you! ✨</div>
         <button class="envelope-btn" onclick="openLetter()">💌</button>
@@ -499,13 +499,11 @@
           <div class="memories-lock-badge" id="memoriesLockBadge">🔒 locked</div>
         </div>
 
-        <!-- Locked overlay -->
         <div class="memories-locked-overlay" id="memoriesLockedOverlay">
           <div class="lock-icon">🔒</div>
           <p>These memories are locked<br>and will unlock when<br>the countdown ends~</p>
         </div>
 
-        <!-- Actual content (hidden until unlocked) -->
         <div class="memories-content locked" id="memoriesContent">
           <div class="mem-tabs">
             <button class="mem-tab active" onclick="switchTab('photos',this)">📸 Photos (42)</button>
@@ -609,104 +607,27 @@
   </div>
 </div>
 
-<!-- Firebase SDK -->
-<script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-  import { getStorage, ref, listAll, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js";
-
-  const firebaseConfig = {
-    apiKey: "AIzaSyCpxKkfJmNj2EudEqZbNlLx0UdPDhDRYAY",
-    authDomain: "puzzle-love-note.firebaseapp.com",
-    projectId: "puzzle-love-note",
-    storageBucket: "puzzle-love-note.firebasestorage.app",
-    messagingSenderId: "163699031865",
-    appId: "1:163699031865:web:4e4251371a27daaca072e8",
-    measurementId: "G-5NE8DG17WQ"
-  };
-
-  const app = initializeApp(firebaseConfig);
-  const storage = getStorage(app);
-
-  // ---- Load photos: img1.jpg, img2.jpg … img42.jpg ----
-  async function loadPhotos() {
-    const grid = document.getElementById('photosGrid');
-    grid.innerHTML = '';
-    for (let i = 1; i <= 42; i++) {
-      const url = await getDownloadURL(ref(storage, `photos/img${i}.jpg`)).catch(() => null);
-      const frame = document.createElement('div');
-      frame.className = 'photo-frame';
-      if (url) {
-        const img = document.createElement('img');
-        img.src = url;
-        img.alt = `Memory ${i}`;
-        img.loading = 'lazy';
-        frame.appendChild(img);
-        const cap = document.createElement('div');
-        cap.className = 'photo-caption';
-        cap.textContent = `img${i}`;
-        frame.appendChild(cap);
-        frame.onclick = () => openPhoto(url, `img${i}`);
-      } else {
-        frame.style.background = '#f0c4c4';
-        frame.style.display = 'flex';
-        frame.style.alignItems = 'center';
-        frame.style.justifyContent = 'center';
-        frame.style.fontSize = '24px';
-        frame.innerHTML = `🌸<div class="photo-caption">img${i}</div>`;
-      }
-      grid.appendChild(frame);
-    }
-    // expose first photo URL for puzzle
-    const firstUrl = await getDownloadURL(ref(storage, 'photos/img1.jpg')).catch(() => null);
-    window._puzzleImageUrl = firstUrl;
-  }
-
-  // ---- Load videos: vid1.mp4 … vid26.mp4 ----
-  async function loadVideos() {
-    const grid = document.getElementById('videosGrid');
-    grid.innerHTML = '';
-    for (let i = 1; i <= 26; i++) {
-      const url = await getDownloadURL(ref(storage, `videos/vid${i}.mp4`)).catch(() => null);
-      const thumb = document.createElement('div');
-      thumb.className = 'video-thumb';
-      if (url) {
-        const v = document.createElement('video');
-        v.src = url;
-        v.muted = true;
-        v.preload = 'metadata';
-        thumb.appendChild(v);
-        const icon = document.createElement('div');
-        icon.className = 'video-play-icon';
-        icon.textContent = '▶️';
-        thumb.appendChild(icon);
-        thumb.onclick = () => openVideoModal(url);
-      } else {
-        thumb.style.background = '#2a1a1a';
-        thumb.innerHTML = `<div class="video-play-icon" style="color:#555">🎬</div>`;
-      }
-      grid.appendChild(thumb);
-    }
-  }
-
-  // Make loaders globally accessible
-  window._loadPhotos = loadPhotos;
-  window._loadVideos = loadVideos;
-</script>
-
 <script>
+// ===== CONFIGURATION =====
+// Place your images in a folder called "photos/" next to this HTML file: photos/img1.jpg ... photos/img42.jpg
+// Place your videos in a folder called "videos/" next to this HTML file: videos/vid1.mp4 ... videos/vid26.mp4
+const PHOTO_COUNT = 42;
+const VIDEO_COUNT = 26;
+const PHOTO_PATH = 'photos/'; // folder relative to this HTML file
+const VIDEO_PATH = 'videos/'; // folder relative to this HTML file
+
 // ===== NAVIGATION =====
 function showPage(id) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.getElementById(id).classList.add('active');
   if (id === 'page2') {
     startTimer();
-    unlockEverything();
   }
-}(id === 'page2') startTimer();
 }
 
 // ===== TIMER =====
-const TARGET = new Date('2026-05-5T00:00:00');
+// ✏️ Set your target date here (YYYY-MM-DDTHH:MM:SS)
+const TARGET = new Date('2026-05-05T00:00:00');
 let timerInterval = null;
 
 function startTimer() {
@@ -744,9 +665,88 @@ function unlockEverything() {
   document.getElementById('memoriesContent').classList.remove('locked');
   document.getElementById('memoriesLockBadge').classList.add('hidden');
 
-  // Load media from Firebase
-  if (window._loadPhotos) window._loadPhotos();
-  if (window._loadVideos) window._loadVideos();
+  // Load media from local folders
+  loadPhotos();
+  loadVideos();
+}
+
+// ===== LOAD PHOTOS (local files) =====
+function loadPhotos() {
+  const grid = document.getElementById('photosGrid');
+  grid.innerHTML = '';
+  for (let i = 1; i <= PHOTO_COUNT; i++) {
+    const url = PHOTO_PATH + 'img' + i + '.jpg';
+    const frame = document.createElement('div');
+    frame.className = 'photo-frame';
+
+    const img = document.createElement('img');
+    img.src = url;
+    img.alt = 'Memory ' + i;
+    img.loading = 'lazy';
+    // On error show a placeholder flower
+    img.onerror = function() {
+      frame.style.background = '#f0c4c4';
+      frame.style.display = 'flex';
+      frame.style.alignItems = 'center';
+      frame.style.justifyContent = 'center';
+      frame.style.fontSize = '28px';
+      this.remove();
+      if (!frame.querySelector('.photo-caption')) {
+        frame.innerHTML = '🌸';
+        const cap = document.createElement('div');
+        cap.className = 'photo-caption';
+        cap.textContent = 'img' + i;
+        frame.appendChild(cap);
+      }
+    };
+    frame.appendChild(img);
+
+    const cap = document.createElement('div');
+    cap.className = 'photo-caption';
+    cap.textContent = 'img' + i;
+    frame.appendChild(cap);
+
+    frame.onclick = () => openPhoto(url, 'img' + i);
+    grid.appendChild(frame);
+  }
+  // Store first image URL for the puzzle
+  window._puzzleImageUrl = PHOTO_PATH + 'img1.jpg';
+}
+
+// ===== LOAD VIDEOS (local files) =====
+function loadVideos() {
+  const grid = document.getElementById('videosGrid');
+  grid.innerHTML = '';
+  for (let i = 1; i <= VIDEO_COUNT; i++) {
+    const url = VIDEO_PATH + 'vid' + i + '.mp4';
+    const thumb = document.createElement('div');
+    thumb.className = 'video-thumb';
+
+    const v = document.createElement('video');
+    v.src = url;
+    v.muted = true;
+    v.preload = 'metadata';
+    // Seek to 0.5s to get a thumbnail frame
+    v.addEventListener('loadedmetadata', () => { v.currentTime = 0.5; });
+    v.onerror = function() {
+      thumb.style.background = '#2a1a1a';
+      this.remove();
+    };
+    thumb.appendChild(v);
+
+    const icon = document.createElement('div');
+    icon.className = 'video-play-icon';
+    icon.textContent = '▶️';
+    thumb.appendChild(icon);
+
+    const lbl = document.createElement('div');
+    lbl.style.cssText = 'position:absolute;bottom:4px;left:0;right:0;text-align:center;font-family:Caveat,cursive;font-size:11px;color:#fff;background:rgba(0,0,0,0.4);padding:2px 0;';
+    lbl.textContent = 'vid' + i;
+    thumb.appendChild(lbl);
+
+    thumb.onclick = () => openVideoModal(url);
+    grid.appendChild(thumb);
+  }
 }
 
 // ===== TABS =====
@@ -914,19 +914,16 @@ function guessLetter() {
 }
 
 // ---- PUZZLE ----
-// 3x3 sliding puzzle using img1 from Firebase (or color tiles if not available)
 let puzzleState = [], puzzleSize = 3, puzzleMoves = 0;
 const puzzleGoal = [1,2,3,4,5,6,7,8,0]; // 0 = empty
 
 function buildPuzzle() {
   puzzleMoves = 0;
-  // Shuffle
   puzzleState = [...puzzleGoal];
   for (let i = puzzleState.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
     [puzzleState[i], puzzleState[j]] = [puzzleState[j], puzzleState[i]];
   }
-  // Ensure solvable
   while (!isSolvable(puzzleState)) {
     for (let i = puzzleState.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
@@ -972,7 +969,6 @@ function renderPuzzle() {
       <div class="puzzle-grid" style="grid-template-columns:repeat(${puzzleSize},1fr);width:${gridSize}px;height:${gridSize}px;">${piecesHTML}</div>
       ${solved ? `<p style="font-family:'Caveat',cursive;font-size:22px;color:#4caf50">🎉 Solved in ${puzzleMoves} moves!</p>` : ''}
       <button class="small-btn" onclick="buildPuzzle()">Shuffle</button>
-      ${imgUrl ? `<div style="font-family:'Caveat',cursive;font-size:13px;color:#aaa">Using img1 as puzzle image</div>` : ''}
     </div>
   `;
 }
