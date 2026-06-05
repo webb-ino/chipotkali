@@ -725,9 +725,13 @@ function loadVideos() {
     const v = document.createElement('video');
     v.src = url;
     v.muted = true;
-    v.preload = 'metadata';
-    // Seek to 0.5s to get a thumbnail frame
-    v.addEventListener('loadedmetadata', () => { v.currentTime = 0.5; });
+    v.autoplay = true;
+    v.loop = true;
+    v.playsInline = true;
+    v.preload = 'auto';
+    v.style.width = '100%';
+    v.style.height = '100%';
+    v.style.objectFit = 'cover';
     v.onerror = function() {
       thumb.style.background = '#2a1a1a';
       this.remove();
@@ -736,7 +740,7 @@ function loadVideos() {
 
     const icon = document.createElement('div');
     icon.className = 'video-play-icon';
-    icon.textContent = '▶️';
+    icon.textContent = '🔇';
     thumb.appendChild(icon);
 
     const lbl = document.createElement('div');
