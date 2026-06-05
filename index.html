@@ -16,9 +16,6 @@
     --gold: #c9a84c;
   }
   * { margin: 0; padding: 0; box-sizing: border-box; }
-  <audio id="bgm" loop>
-  <source src="bgm.mp3" type="audio/mpeg">
-</audio>
   body {
     font-family: 'Crimson Text', serif;
     background: var(--cream);
@@ -27,11 +24,9 @@
     overflow-x: hidden;
   }
 
-  /* ===== PAGES ===== */
   .page { display: none; min-height: 100vh; position: relative; }
   .page.active { display: flex; flex-direction: column; }
 
-  /* ===== PAGE 1 ===== */
   #page1 { align-items: center; justify-content: center; background: var(--cream); }
 
   .flower-left {
@@ -77,21 +72,18 @@
   .btn-no { background: transparent; color: var(--dark); border-color: var(--dark); }
   .btn-no:hover { background: var(--dark); color: var(--cream); transform: scale(1.05); }
 
-  /* ===== PAGE 2 ===== */
   #page2 { background: var(--cream); }
   .main-layout {
     display: grid; grid-template-columns: 1fr 320px;
     gap: 0; flex: 1; min-height: 100vh;
   }
 
-  /* LEFT */
   .left-panel {
     padding: 40px 32px; display: flex; flex-direction: column;
     align-items: center; gap: 36px;
     border-right: 1px solid rgba(139,26,26,0.12);
   }
 
-  /* Timer */
   .timer-section { text-align: center; width: 100%; }
   .timer-label {
     font-family: 'Playfair Display', serif; font-size: 14px;
@@ -114,7 +106,6 @@
     color: var(--red); opacity: .4; align-self: flex-start; padding-top: 4px;
   }
 
-  /* Envelope */
   .envelope-wrap {
     display: flex; flex-direction: column; align-items: center; gap: 10px;
     position: relative;
@@ -147,7 +138,7 @@
   .envelope-wrap.unlocked .envelope-hint { animation: fadeIn .8s ease; }
   @keyframes fadeIn { from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:translateY(0)} }
 
-  /* Memories Section */
+  /* ===== VIDEO SECTION ===== */
   .memories-section { width: 100%; }
   .memories-header {
     display: flex; align-items: center; justify-content: center;
@@ -165,51 +156,6 @@
   }
   .memories-lock-badge.hidden { display: none; }
 
-  /* Tabs */
-  .mem-tabs {
-    display: flex; gap: 0; margin-bottom: 18px;
-    border: 1.5px solid var(--blush); border-radius: 24px; overflow: hidden;
-  }
-  .mem-tab {
-    flex: 1; font-family: 'Caveat', cursive; font-size: 16px;
-    padding: 8px 0; border: none; background: transparent; cursor: pointer;
-    color: #999; transition: all .2s;
-  }
-  .mem-tab.active { background: var(--red); color: var(--cream); }
-
-  /* Photo Grid */
-  .photos-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-  grid-auto-rows: 180px;
-  gap: 8px;
-  width: 100%;
-}
-
-.photo-frame {
-  border: 3px solid white;
-  overflow: hidden;
-  border-radius: 12px;
-  transform: none !important;
-  aspect-ratio: auto;
-  height: 100%;
-}
-
-.photo-frame:nth-child(4n) {
-  grid-row: span 2;
-}
-
-.photo-frame:nth-child(7n) {
-  grid-column: span 2;
-}
-
-.photo-frame img,
-.photo-frame video {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-  /* Lock state for memories */
   .memories-locked-overlay {
     width: 100%; min-height: 160px; background: rgba(245,240,232,0.9);
     border: 2px dashed var(--blush); border-radius: 16px;
@@ -223,22 +169,30 @@
   .memories-content { width: 100%; }
   .memories-content.locked { display: none; }
 
-  /* Videos Grid */
-  .videos-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 10px; }
-  .video-thumb {
-    aspect-ratio: 16/10; border: 4px solid #fff;
-    box-shadow: 2px 2px 8px rgba(0,0,0,.12);
-    cursor: pointer; overflow: hidden; position: relative;
-    background: #2a1a1a; border-radius: 4px;
-    display: flex; align-items: center; justify-content: center;
+  /* Single video container */
+  .single-video-wrap {
+    width: 100%;
+    border-radius: 16px;
+    overflow: hidden;
+    border: 4px solid #fff;
+    box-shadow: 0 4px 20px rgba(139,26,26,0.15);
+    background: #2a1a1a;
+    position: relative;
   }
-  .video-thumb video { width: 100%; height: 100%; object-fit: cover; }
-  .video-play-icon {
-    position: absolute; font-size: 32px; opacity: .85;
-    filter: drop-shadow(0 2px 6px rgba(0,0,0,.5));
-    pointer-events: none;
+  .single-video-wrap video {
+    width: 100%;
+    display: block;
+    max-height: 420px;
+    object-fit: cover;
   }
-  .video-thumb:hover .video-play-icon { transform: scale(1.2); }
+  .video-caption {
+    font-family: 'Caveat', cursive;
+    font-size: 16px;
+    color: var(--rose);
+    text-align: center;
+    padding: 10px 0 4px;
+    letter-spacing: .04em;
+  }
 
   /* RIGHT */
   .right-panel {
@@ -265,7 +219,7 @@
   }
   .play-btn:hover { background: #6a1010; transform: scale(1.04); }
 
-  /* ===== MODALS ===== */
+  /* MODALS */
   .modal-overlay {
     display: none; position: fixed; inset: 0;
     background: rgba(42,26,26,.75); z-index: 200;
@@ -279,7 +233,6 @@
   }
   .modal-close:hover { color: var(--red); }
 
-  /* Letter Modal */
   .modal-box {
     background: #fdf8f0; border-radius: 4px;
     max-width: 520px; width: 100%; max-height: 85vh; overflow-y: auto;
@@ -294,26 +247,6 @@
   .letter-body p { margin-bottom: 16px; }
   .letter-sign { margin-top: 28px; font-family: 'Caveat', cursive; font-size: 22px; color: var(--red); text-align: right; }
 
-  /* Photo zoom */
-  .photo-modal-box {
-    background: #fff; padding: 14px; border-radius: 4px;
-    max-width: 500px; width: 90%; text-align: center;
-    box-shadow: 0 20px 60px rgba(0,0,0,.35); animation: popIn .4s ease; position: relative;
-  }
-  .photo-modal-box img {
-    width: 100%; max-height: 70vh; object-fit: contain;
-    border: 6px solid #fff; box-shadow: inset 0 0 0 1px rgba(0,0,0,.06);
-  }
-  .photo-modal-box p { font-family: 'Caveat', cursive; font-size: 17px; color: #555; margin-top: 8px; }
-
-  /* Video modal */
-  .video-modal-box {
-    background: #111; border-radius: 8px; max-width: 680px; width: 95%;
-    box-shadow: 0 20px 60px rgba(0,0,0,.5); animation: popIn .4s ease; position: relative; overflow: hidden;
-  }
-  .video-modal-box video { width: 100%; display: block; max-height: 80vh; }
-
-  /* Game modal */
   .game-modal-box {
     background: #fdf8f0; border-radius: 16px; max-width: 440px; width: 92%;
     padding: 32px 28px 24px; box-shadow: 0 20px 60px rgba(0,0,0,.3);
@@ -322,7 +255,6 @@
   }
   .game-modal-box h2 { font-family: 'Caveat', cursive; font-size: 26px; font-weight: 700; color: var(--dark); margin-bottom: 16px; }
 
-  /* Quiz */
   .quiz-q { font-family: 'Crimson Text', serif; font-size: 18px; font-style: italic; color: var(--dark); margin-bottom: 16px; line-height: 1.5; }
   .quiz-options { display: flex; flex-direction: column; gap: 9px; margin-bottom: 14px; }
   .quiz-opt {
@@ -335,7 +267,6 @@
   .quiz-opt.wrong { border-color: var(--red); background: #fde8e8; }
   .quiz-score { font-family: 'Caveat', cursive; font-size: 18px; color: var(--rose); }
 
-  /* Word game */
   .word-display { font-family: 'Caveat', cursive; font-size: 32px; letter-spacing: 10px; color: var(--red); margin-bottom: 14px; }
   .word-input-row { display: flex; gap: 10px; justify-content: center; margin-bottom: 12px; }
   .word-input {
@@ -348,7 +279,6 @@
   .word-guessed { font-family: 'Caveat', cursive; font-size: 15px; color: #aaa; margin-bottom: 10px; }
   .game-info { font-family: 'Caveat', cursive; font-size: 17px; color: #666; margin-bottom: 12px; }
 
-  /* Memory */
   .memory-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 9px; margin-bottom: 14px; }
   .mem-card {
     aspect-ratio: 1; background: var(--red); border-radius: 10px; cursor: pointer;
@@ -358,7 +288,6 @@
   .mem-card.flipped, .mem-card.matched { background: #fff; border: 2px solid var(--blush); color: inherit; }
   .mem-card.matched { background: #edf7ed; cursor: default; }
 
-  /* Puzzle */
   .puzzle-wrap { display: flex; flex-direction: column; align-items: center; gap: 10px; }
   .puzzle-grid {
     display: grid;
@@ -377,7 +306,6 @@
   .puzzle-piece.correct { border-color: #4caf50 !important; }
   .puzzle-info { font-family: 'Caveat', cursive; font-size: 17px; color: #666; }
 
-  /* Small btn */
   .small-btn {
     font-family: 'Caveat', cursive; font-size: 15px; font-weight: 700;
     letter-spacing: .06em; background: transparent; color: var(--red);
@@ -386,12 +314,10 @@
   }
   .small-btn:hover { background: var(--red); color: #fff; }
 
-  /* No Thanks */
   #page-no { align-items: center; justify-content: center; text-align: center; background: var(--cream); }
   .no-thanks-text { font-family: 'Caveat', cursive; font-size: 30px; color: var(--rose); max-width: 400px; animation: fadeIn .8s ease; }
   .no-thanks-text span { font-size: 58px; display: block; margin-bottom: 14px; }
 
-  /* Responsive */
   @media (max-width: 700px) {
     .main-layout { grid-template-columns: 1fr; }
     .right-panel { border-top: 1px solid rgba(139,26,26,.1); }
@@ -401,9 +327,13 @@
 </head>
 <body>
 
-<!-- ===== PAGE 1: GREETING ===== -->
+<!-- BGM audio -->
+<audio id="bgm" loop>
+  <source src="bgm.mp3" type="audio/mpeg">
+</audio>
+
+<!-- PAGE 1 -->
 <div id="page1" class="page active">
-  <!-- Left flower -->
   <svg class="flower-left" viewBox="0 0 220 340" xmlns="http://www.w3.org/2000/svg">
     <g transform="translate(60,320)">
       <path d="M0,0 C-10,-60 10,-120 -5,-200" stroke="#4a7c40" stroke-width="4" fill="none"/>
@@ -423,7 +353,6 @@
       </g>
     </g>
   </svg>
-  <!-- Right flower -->
   <svg class="flower-right" viewBox="0 0 220 340" xmlns="http://www.w3.org/2000/svg">
     <g transform="translate(120,320)">
       <path d="M0,0 C8,-50 -8,-120 5,-200" stroke="#6b7c40" stroke-width="4" fill="none"/>
@@ -475,11 +404,10 @@
   </div>
 </div>
 
-<!-- ===== PAGE 2: MAIN ===== -->
+<!-- PAGE 2 -->
 <div id="page2" class="page">
   <div class="main-layout">
 
-    <!-- LEFT PANEL -->
     <div class="left-panel">
 
       <!-- Timer -->
@@ -506,26 +434,36 @@
         </div>
       </div>
 
-      <!-- Memories -->
+      <!-- Video Section -->
       <div class="memories-section" style="width:100%">
         <div class="memories-header">
-          <div class="memories-title">✦ moments ✦</div>
+          <div class="memories-title">✦ a moment for you ✦</div>
           <div class="memories-lock-badge" id="memoriesLockBadge">🔒 locked</div>
         </div>
 
         <div class="memories-locked-overlay" id="memoriesLockedOverlay">
           <div class="lock-icon">🔒</div>
-          <p>These memories are locked<br>and will unlock when<br>the countdown ends~</p>
+          <p>This surprise is locked<br>and will unlock when<br>the countdown ends~</p>
         </div>
 
         <div class="memories-content locked" id="memoriesContent">
-         <div class="photos-grid" id="mixedGrid"></div>
+          <div class="single-video-wrap">
+            <!-- ✏️ Replace "vid1.mp4" with your video filename -->
+            <video
+              id="mainVideo"
+              src="vid1.mp4"
+              controls
+              playsinline
+              preload="metadata"
+            ></video>
+          </div>
+          <div class="video-caption">🌸 press play — the music starts with the video ✨</div>
         </div>
       </div>
 
     </div><!-- /left-panel -->
 
-    <!-- RIGHT PANEL: Games -->
+    <!-- RIGHT PANEL -->
     <div class="right-panel">
       <div class="games-title">✦ play while you wait ✦</div>
 
@@ -557,7 +495,7 @@
   </div>
 </div>
 
-<!-- ===== PAGE: NO THANKS ===== -->
+<!-- PAGE: NO THANKS -->
 <div id="page-no" class="page">
   <div class="no-thanks-text">
     <span>🥺</span>
@@ -567,13 +505,12 @@
   </div>
 </div>
 
-<!-- ===== MODAL: Letter ===== -->
+<!-- MODAL: Letter -->
 <div class="modal-overlay" id="letterModal">
   <div class="modal-box">
     <button class="modal-close" onclick="closeModal('letterModal')">✕</button>
     <div class="letter-deco">🌸 ✦ 🌸</div>
     <div class="letter-body">
-      <!-- ✏️ REPLACE THIS LETTER CONTENT BELOW -->
       <p>The way you laugh feels like music in the air,
 The way you look leaves beauty everywhere.
 Your pretty eyes, when kissed by the sun's golden light,
@@ -594,43 +531,20 @@ The sun looks prettier resting upon your face,
 As if it has finally found its favorite place.
 And when you speak, the world grows still somehow,
 As though nothing else matters except the here and now.
-        You don't just brighten the places where you go,
+You don't just brighten the places where you go,
 You leave a little piece of your light in every soul.
 And if I could wish for one thing my whole life through,
 It would be to keep discovering new reasons to fall for you.
 Because every day with you reveals something new to adore,
 And somehow, no matter how much I love you today,
 Tomorrow I'll love you even more.* ❤️✨🥹</p>
-      <p></p>
-      <p></p>
       <p>[Happiest birthday to my chipotkali 🫂💋✨ I loveeeeee youuuu berry  muchhhhh myyiieeee strawberry 🍓✨i wish you every happiness in life 🫶🏻✨ ik you will achieve it ofc !! And earn soo much money and spend on me hahaha 🙈 apart from this know that you have me in every part of life !! In happiest to saddest moments from highest to lowest phase of life !! I will always stay by your side sandika 🙂‍↔️</p>
-      <!-- ✏️ END OF LETTER CONTENT -->
     </div>
-    <div class="letter-sign">
-      <!-- ✏️ REPLACE WITH YOUR SIGN-OFF -->
-      With love, Ayushi 💕
-    </div>
+    <div class="letter-sign">With love, Ayushi 💕</div>
   </div>
 </div>
 
-<!-- ===== MODAL: Photo Zoom ===== -->
-<div class="modal-overlay" id="photoModal">
-  <div class="photo-modal-box" style="position:relative">
-    <button class="modal-close" onclick="closeModal('photoModal')">✕</button>
-    <img id="bigPhotoImg" src="" alt="memory"/>
-    <p id="bigPhotoCaption"></p>
-  </div>
-</div>
-
-<!-- ===== MODAL: Video ===== -->
-<div class="modal-overlay" id="videoModal">
-  <div class="video-modal-box" style="position:relative">
-    <button class="modal-close" onclick="closeVideoModal()" style="color:#fff">✕</button>
-    <video id="modalVideo" controls playsinline></video>
-  </div>
-</div>
-
-<!-- ===== MODAL: Games ===== -->
+<!-- MODAL: Games -->
 <div class="modal-overlay" id="gameModal">
   <div class="game-modal-box" id="gameModalBox">
     <button class="modal-close" onclick="closeModal('gameModal')">✕</button>
@@ -640,456 +554,265 @@ Tomorrow I'll love you even more.* ❤️✨🥹</p>
 
 <script>
   const bgm = document.getElementById('bgm');
+  const mainVideo = document.getElementById('mainVideo');
 
-function playBGM() {
-  bgm.volume = 0.4; // 40% volume
-  bgm.play().catch(() => {
-    console.log("User interaction required to start audio");
+  // BGM syncs with the main video — plays when video plays, pauses when video pauses
+  mainVideo.addEventListener('play', () => {
+    bgm.volume = 0.4;
+    bgm.play().catch(() => {});
   });
-}
-// ===== CONFIGURATION =====
-// Place your images in a folder called "photos/" next to this HTML file: photos/img1.jpg ... photos/img42.jpg
-// Place your videos in a folder called "videos/" next to this HTML file: videos/vid1.mp4 ... videos/vid26.mp4
-const PHOTO_COUNT = 42;
-const VIDEO_COUNT = 26;
-const PHOTO_PATH = ''; // same folder as index.html
-const VIDEO_PATH = ''; // same folder as index.html
+  mainVideo.addEventListener('pause', () => {
+    bgm.pause();
+  });
+  mainVideo.addEventListener('ended', () => {
+    bgm.pause();
+    bgm.currentTime = 0;
+  });
 
-// ===== NAVIGATION =====
-function showPage(id) {
-  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
-  if (id === 'page2') {
-    startTimer();
+  // Navigation
+  function showPage(id) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    if (id === 'page2') startTimer();
   }
-}
 
-// ===== TIMER =====
-// ✏️ Set your target date here (YYYY-MM-DDTHH:MM:SS)
-const TARGET = new Date('2026-05-05T00:00:00');
-let timerInterval = null;
+  // Timer
+  const TARGET = new Date('2026-05-05T00:00:00');
+  let timerInterval = null;
 
-function startTimer() {
-  if (timerInterval) return;
-  timerInterval = setInterval(updateTimer, 1000);
-  updateTimer();
-}
-
-function updateTimer() {
-  const now = new Date();
-  const diff = TARGET - now;
-  if (diff <= 0) {
-    ['td','th','tm','ts'].forEach(id => document.getElementById(id).textContent = '00');
-    clearInterval(timerInterval);
-    unlockEverything();
-    return;
+  function startTimer() {
+    if (timerInterval) return;
+    timerInterval = setInterval(updateTimer, 1000);
+    updateTimer();
   }
-  const days  = Math.floor(diff / 86400000);
-  const hours = Math.floor((diff % 86400000) / 3600000);
-  const mins  = Math.floor((diff % 3600000) / 60000);
-  const secs  = Math.floor((diff % 60000) / 1000);
-  document.getElementById('td').textContent = String(days).padStart(2,'0');
-  document.getElementById('th').textContent = String(hours).padStart(2,'0');
-  document.getElementById('tm').textContent = String(mins).padStart(2,'0');
-  document.getElementById('ts').textContent = String(secs).padStart(2,'0');
-}
 
-function unlockEverything() {
-  // Unlock envelope
-  document.getElementById('envelopeLock').style.display = 'none';
-  document.getElementById('envelopeWrap').classList.add('unlocked');
-
-  // Unlock memories
-  document.getElementById('memoriesLockedOverlay').style.display = 'none';
-  document.getElementById('memoriesContent').classList.remove('locked');
-  document.getElementById('memoriesLockBadge').classList.add('hidden');
-
-  // Load media from local folders
-loadMixed();
-}
-
-// ===== LOAD PHOTOS (local files) =====
-function loadPhotos() {
-  window._puzzleImageUrl = PHOTO_PATH + 'img1.png';
-}
-
-function loadVideos() {}
-
-function loadMixed() {
-  const grid = document.getElementById('mixedGrid');
-  grid.innerHTML = '';
-  let photoIdx = 1;
-  let videoIdx = 1;
-  let position = 0;
-
-  while (photoIdx <= PHOTO_COUNT || videoIdx <= VIDEO_COUNT) {
-    // every 4th item (position 3,7,11...) is a video
-    if ((position + 1) % 4 === 0 && videoIdx <= VIDEO_COUNT) {
-      // add video
-      const url = VIDEO_PATH + 'vid' + videoIdx + '.mp4';
-      const thumb = document.createElement('div');
-      thumb.className = 'photo-frame';
-      thumb.style.background = '#2a1a1a';
-
-      const v = document.createElement('video');
-      v.src = url;
-      v.muted = true;
-      v.autoplay = true;
-      v.loop = true;
-      v.playsInline = true;
-      v.preload = 'auto';
-      v.style.cssText = 'width:100%;height:100%;object-fit:cover;display:block;';
-      v.onerror = function() { thumb.style.background = '#2a1a1a'; this.remove(); };
-      thumb.appendChild(v);
-
-      const icon = document.createElement('div');
-      icon.className = 'photo-caption';
-      icon.textContent = '▶ vid' + videoIdx;
-      thumb.appendChild(icon);
-
-      const vUrl = url;
-      thumb.onclick = () => openVideoModal(vUrl);
-      grid.appendChild(thumb);
-      videoIdx++;
-
-    } else if (photoIdx <= PHOTO_COUNT) {
-      // add photo
-      const url = PHOTO_PATH + 'img' + photoIdx + '.png';
-      const frame = document.createElement('div');
-      frame.className = 'photo-frame';
-
-      const img = document.createElement('img');
-      img.src = url;
-      img.alt = 'Memory ' + photoIdx;
-      img.loading = 'lazy';
-      img.onerror = function() {
-        frame.style.background = '#f0c4c4';
-        frame.style.display = 'flex';
-        frame.style.alignItems = 'center';
-        frame.style.justifyContent = 'center';
-        frame.style.fontSize = '28px';
-        this.remove();
-        frame.innerHTML = '🌸';
-        const cap = document.createElement('div');
-        cap.className = 'photo-caption';
-        cap.textContent = 'img' + photoIdx;
-        frame.appendChild(cap);
-      };
-      frame.appendChild(img);
-
-      const cap = document.createElement('div');
-      cap.className = 'photo-caption';
-      cap.textContent = 'img' + photoIdx;
-      frame.appendChild(cap);
-
-      const pUrl = url;
-      const pIdx = photoIdx;
-      frame.onclick = () => openPhoto(pUrl, 'img' + pIdx);
-      grid.appendChild(frame);
-      photoIdx++;
-    } else {
-      // only videos left
-      const url = VIDEO_PATH + 'vid' + videoIdx + '.mp4';
-      const thumb = document.createElement('div');
-      thumb.className = 'photo-frame';
-      thumb.style.background = '#2a1a1a';
-
-      const v = document.createElement('video');
-      v.src = url;
-      v.muted = true;
-      v.autoplay = true;
-      v.loop = true;
-      v.playsInline = true;
-      v.preload = 'auto';
-      v.style.cssText = 'width:100%;height:100%;object-fit:cover;display:block;';
-      thumb.appendChild(v);
-
-      const icon = document.createElement('div');
-      icon.className = 'photo-caption';
-      icon.textContent = '▶ vid' + videoIdx;
-      thumb.appendChild(icon);
-
-      const vUrl = url;
-      thumb.onclick = () => openVideoModal(vUrl);
-      grid.appendChild(thumb);
-      videoIdx++;
+  function updateTimer() {
+    const now = new Date();
+    const diff = TARGET - now;
+    if (diff <= 0) {
+      ['td','th','tm','ts'].forEach(id => document.getElementById(id).textContent = '00');
+      clearInterval(timerInterval);
+      unlockEverything();
+      return;
     }
-    position++;
+    const days  = Math.floor(diff / 86400000);
+    const hours = Math.floor((diff % 86400000) / 3600000);
+    const mins  = Math.floor((diff % 3600000) / 60000);
+    const secs  = Math.floor((diff % 60000) / 1000);
+    document.getElementById('td').textContent = String(days).padStart(2,'0');
+    document.getElementById('th').textContent = String(hours).padStart(2,'0');
+    document.getElementById('tm').textContent = String(mins).padStart(2,'0');
+    document.getElementById('ts').textContent = String(secs).padStart(2,'0');
   }
-  window._puzzleImageUrl = PHOTO_PATH + 'img1.png';
-}
 
-// ===== LOAD VIDEOS (local files) =====
-function loadVideos() {
-  const grid = document.getElementById('videosGrid');
-  grid.innerHTML = '';
-  for (let i = 1; i <= VIDEO_COUNT; i++) {
-    const url = VIDEO_PATH + 'vid' + i + '.mp4';
-    const thumb = document.createElement('div');
-    thumb.className = 'video-thumb';
-
-    const v = document.createElement('video');
-    v.src = url;
-    v.muted = true;
-    v.autoplay = true;
-    v.loop = true;
-    v.playsInline = true;
-    v.preload = 'auto';
-    v.style.width = '100%';
-    v.style.height = '100%';
-    v.style.objectFit = 'cover';
-    v.onerror = function() {
-      thumb.style.background = '#2a1a1a';
-      this.remove();
-    };
-    thumb.appendChild(v);
-
-    const icon = document.createElement('div');
-    icon.className = 'video-play-icon';
-    icon.textContent = '';
-    thumb.appendChild(icon);
-
-    const lbl = document.createElement('div');
-    lbl.style.cssText = 'position:absolute;bottom:4px;left:0;right:0;text-align:center;font-family:Caveat,cursive;font-size:11px;color:#fff;background:rgba(0,0,0,0.4);padding:2px 0;';
-    lbl.textContent = 'vid' + i;
-    thumb.appendChild(lbl);
-
-    thumb.onclick = () => openVideoModal(url);
-    grid.appendChild(thumb);
+  function unlockEverything() {
+    document.getElementById('envelopeLock').style.display = 'none';
+    document.getElementById('envelopeWrap').classList.add('unlocked');
+    document.getElementById('memoriesLockedOverlay').style.display = 'none';
+    document.getElementById('memoriesContent').classList.remove('locked');
+    document.getElementById('memoriesLockBadge').classList.add('hidden');
   }
-}
-// ===== MODALS =====
-function openLetter() {
-  if (!document.getElementById('envelopeWrap').classList.contains('unlocked')) return;
-  document.getElementById('letterModal').classList.add('show');
-}
-function closeModal(id) {
-  document.getElementById(id).classList.remove('show');
-}
-function openPhoto(url, caption) {
-  document.getElementById('bigPhotoImg').src = url;
-  document.getElementById('bigPhotoCaption').textContent = caption;
-  document.getElementById('photoModal').classList.add('show');
-}
-function openVideoModal(url) {
-  const v = document.getElementById('modalVideo');
-  v.src = url;
-  v.muted = false;
-  v.controls = true;
-  document.getElementById('videoModal').classList.add('show');
-  v.play().catch(() => {
-    v.muted = true;
-    v.play();
-  });
-}
-function closeVideoModal() {
-  const v = document.getElementById('modalVideo');
-  v.pause(); v.src = '';
-  document.getElementById('videoModal').classList.remove('show');
-}
-document.querySelectorAll('.modal-overlay').forEach(m => {
-  m.addEventListener('click', e => {
-    if (e.target === m) {
-      if (m.id === 'videoModal') closeVideoModal();
-      else m.classList.remove('show');
-    }
-  });
-});
 
-// ===== GAMES =====
-function openGame(type) {
-  document.getElementById('gameModal').classList.add('show');
-  if (type === 'memory') buildMemory();
-  else if (type === 'quiz') buildQuiz();
-  else if (type === 'word') buildWord();
-  else if (type === 'puzzle') buildPuzzle();
-}
+  // Modals
+  function openLetter() {
+    if (!document.getElementById('envelopeWrap').classList.contains('unlocked')) return;
+    document.getElementById('letterModal').classList.add('show');
+  }
+  function closeModal(id) {
+    document.getElementById(id).classList.remove('show');
+  }
 
-// ---- MEMORY ----
-const memEmojis = ['🌸','🌹','🦋','🎂','✨','💌','🌙','🍰'];
-let memFlipped = [], memMatched = 0, memMoves = 0, memLock = false;
-
-function buildMemory() {
-  memFlipped = []; memMatched = 0; memMoves = 0; memLock = false;
-  const cards = [...memEmojis, ...memEmojis].sort(() => Math.random()-.5);
-  document.getElementById('gameContent').innerHTML = `
-    <h2>🃏 Memory Match</h2>
-    <div class="game-info">Moves: <span id="memMoves">0</span> &nbsp;|&nbsp; Pairs: <span id="memPairs">0</span>/8</div>
-    <div class="memory-grid" id="memGrid"></div>
-    <button class="small-btn" onclick="buildMemory()">Restart</button>
-  `;
-  const grid = document.getElementById('memGrid');
-  cards.forEach(emoji => {
-    const card = document.createElement('div');
-    card.className = 'mem-card';
-    card.dataset.emoji = emoji;
-    card.textContent = emoji;
-    card.onclick = () => flipCard(card);
-    grid.appendChild(card);
+  document.querySelectorAll('.modal-overlay').forEach(m => {
+    m.addEventListener('click', e => {
+      if (e.target === m) m.classList.remove('show');
+    });
   });
-}
-function flipCard(card) {
-  if (memLock || card.classList.contains('flipped') || card.classList.contains('matched')) return;
-  card.classList.add('flipped');
-  memFlipped.push(card);
-  if (memFlipped.length === 2) {
-    memMoves++;
-    document.getElementById('memMoves').textContent = memMoves;
-    memLock = true;
-    if (memFlipped[0].dataset.emoji === memFlipped[1].dataset.emoji) {
-      memFlipped.forEach(c => c.classList.add('matched'));
-      memFlipped = []; memMatched++; memLock = false;
-      document.getElementById('memPairs').textContent = memMatched;
-      if (memMatched === 8) setTimeout(() => {
-        document.getElementById('gameContent').innerHTML += `<p style="font-family:'Caveat',cursive;font-size:22px;color:var(--red);margin-top:10px">🎉 You won in ${memMoves} moves!</p>`;
-      }, 300);
-    } else {
-      setTimeout(() => { memFlipped.forEach(c => c.classList.remove('flipped')); memFlipped = []; memLock = false; }, 900);
+
+  // ===== GAMES =====
+  function openGame(type) {
+    document.getElementById('gameModal').classList.add('show');
+    if (type === 'memory') buildMemory();
+    else if (type === 'quiz') buildQuiz();
+    else if (type === 'word') buildWord();
+    else if (type === 'puzzle') buildPuzzle();
+  }
+
+  // Memory Match
+  const memEmojis = ['🌸','🌹','🦋','🎂','✨','💌','🌙','🍰'];
+  let memFlipped = [], memMatched = 0, memMoves = 0, memLock = false;
+
+  function buildMemory() {
+    memFlipped = []; memMatched = 0; memMoves = 0; memLock = false;
+    const cards = [...memEmojis, ...memEmojis].sort(() => Math.random()-.5);
+    document.getElementById('gameContent').innerHTML = `
+      <h2>🃏 Memory Match</h2>
+      <div class="game-info">Moves: <span id="memMoves">0</span> &nbsp;|&nbsp; Pairs: <span id="memPairs">0</span>/8</div>
+      <div class="memory-grid" id="memGrid"></div>
+      <button class="small-btn" onclick="buildMemory()">Restart</button>
+    `;
+    const grid = document.getElementById('memGrid');
+    cards.forEach(emoji => {
+      const card = document.createElement('div');
+      card.className = 'mem-card';
+      card.dataset.emoji = emoji;
+      card.textContent = emoji;
+      card.onclick = () => flipCard(card);
+      grid.appendChild(card);
+    });
+  }
+  function flipCard(card) {
+    if (memLock || card.classList.contains('flipped') || card.classList.contains('matched')) return;
+    card.classList.add('flipped');
+    memFlipped.push(card);
+    if (memFlipped.length === 2) {
+      memMoves++;
+      document.getElementById('memMoves').textContent = memMoves;
+      memLock = true;
+      if (memFlipped[0].dataset.emoji === memFlipped[1].dataset.emoji) {
+        memFlipped.forEach(c => c.classList.add('matched'));
+        memFlipped = []; memMatched++; memLock = false;
+        document.getElementById('memPairs').textContent = memMatched;
+        if (memMatched === 8) setTimeout(() => {
+          document.getElementById('gameContent').innerHTML += `<p style="font-family:'Caveat',cursive;font-size:22px;color:var(--red);margin-top:10px">🎉 You won in ${memMoves} moves!</p>`;
+        }, 300);
+      } else {
+        setTimeout(() => { memFlipped.forEach(c => c.classList.remove('flipped')); memFlipped = []; memLock = false; }, 900);
+      }
     }
   }
-}
 
-// ---- QUIZ ----
-const quizData = [
-  { q: "What's the most magical thing about birthdays?", opts: ["Cake 🍰","Gifts 🎁","Hugs 🤗","All of the above ✨"], correct: 3 },
-  { q: "What would your perfect birthday feel like?", opts: ["Cozy at home 🏠","Adventure outside 🌿","Big party 🎉","Just me & cake 🎂"], correct: -1 },
-  { q: "Pick your birthday vibe:", opts: ["Stargazing 🌙","Garden picnic 🌸","Movie marathon 🎬","Dancing 💃"], correct: -1 },
-  { q: "What's the best birthday gift ever?", opts: ["Surprise trip ✈️","Heartfelt letter 💌","Yummy food 🍜","Quality time 💕"], correct: -1 },
-];
-let quizIdx = 0;
-function buildQuiz() { quizIdx = 0; renderQuiz(); }
-function renderQuiz() {
-  if (quizIdx >= quizData.length) {
-    document.getElementById('gameContent').innerHTML = `<h2>🌸 Quiz</h2><p style="font-family:'Crimson Text',serif;font-size:19px;font-style:italic;margin:20px 0">No wrong answers on your birthday~<br><br>🎂 You are birthday-perfect 🎂</p><button class="small-btn" onclick="buildQuiz()">Play Again</button>`;
-    return;
+  // Quiz
+  const quizData = [
+    { q: "What's the most magical thing about birthdays?", opts: ["Cake 🍰","Gifts 🎁","Hugs 🤗","All of the above ✨"], correct: 3 },
+    { q: "What would your perfect birthday feel like?", opts: ["Cozy at home 🏠","Adventure outside 🌿","Big party 🎉","Just me & cake 🎂"], correct: -1 },
+    { q: "Pick your birthday vibe:", opts: ["Stargazing 🌙","Garden picnic 🌸","Movie marathon 🎬","Dancing 💃"], correct: -1 },
+    { q: "What's the best birthday gift ever?", opts: ["Surprise trip ✈️","Heartfelt letter 💌","Yummy food 🍜","Quality time 💕"], correct: -1 },
+  ];
+  let quizIdx = 0;
+  function buildQuiz() { quizIdx = 0; renderQuiz(); }
+  function renderQuiz() {
+    if (quizIdx >= quizData.length) {
+      document.getElementById('gameContent').innerHTML = `<h2>🌸 Quiz</h2><p style="font-family:'Crimson Text',serif;font-size:19px;font-style:italic;margin:20px 0">No wrong answers on your birthday~<br><br>🎂 You are birthday-perfect 🎂</p><button class="small-btn" onclick="buildQuiz()">Play Again</button>`;
+      return;
+    }
+    const q = quizData[quizIdx];
+    document.getElementById('gameContent').innerHTML = `
+      <h2>🌸 Quiz</h2>
+      <div class="quiz-q">${q.q}</div>
+      <div class="quiz-options">${q.opts.map((o,i)=>`<button class="quiz-opt" onclick="pickQuiz(${i})">${o}</button>`).join('')}</div>
+      <div class="quiz-score">Question ${quizIdx+1} of ${quizData.length}</div>
+    `;
   }
-  const q = quizData[quizIdx];
-  document.getElementById('gameContent').innerHTML = `
-    <h2>🌸 Quiz</h2>
-    <div class="quiz-q">${q.q}</div>
-    <div class="quiz-options">${q.opts.map((o,i)=>`<button class="quiz-opt" onclick="pickQuiz(${i})">${o}</button>`).join('')}</div>
-    <div class="quiz-score">Question ${quizIdx+1} of ${quizData.length}</div>
-  `;
-}
-function pickQuiz(i) {
-  const q = quizData[quizIdx];
-  document.querySelectorAll('.quiz-opt').forEach(o => o.style.pointerEvents = 'none');
-  const opts = document.querySelectorAll('.quiz-opt');
-  if (q.correct === -1) { opts[i].style.borderColor = 'var(--gold)'; opts[i].style.background = '#fdf5e0'; }
-  else { if (i === q.correct) opts[i].classList.add('correct'); else { opts[i].classList.add('wrong'); opts[q.correct].classList.add('correct'); } }
-  setTimeout(() => { quizIdx++; renderQuiz(); }, 1000);
-}
-
-// ---- WORD ----
-const wordBank = [
-  { word: 'BIRTHDAY', hint: 'The reason we\'re here 🎂' },
-  { word: 'FLOWERS',  hint: 'Nature\'s gift 🌸' },
-  { word: 'SPARKLE',  hint: 'What you do ✨' },
-  { word: 'MAGICAL',  hint: 'Just like you 🌙' },
-  { word: 'BELOVED',  hint: 'You are so... 💕' },
-];
-let wCurrent, wGuessed, wWrong;
-function buildWord() {
-  const w = wordBank[Math.floor(Math.random()*wordBank.length)];
-  wCurrent = w.word; wGuessed = new Set(); wWrong = 0; renderWord();
-}
-function renderWord() {
-  const display = wCurrent.split('').map(c => wGuessed.has(c) ? c : '_').join(' ');
-  const won = wCurrent.split('').every(c => wGuessed.has(c));
-  const lost = wWrong >= 6;
-  const hint = wordBank.find(w => w.word === wCurrent).hint;
-  document.getElementById('gameContent').innerHTML = `
-    <h2>🔤 Guess the Word</h2>
-    <div class="word-display">${display}</div>
-    <div class="word-hint">${hint}</div>
-    <div class="word-guessed">Wrong: ${wWrong}/6 &nbsp; Used: ${[...wGuessed].join(' ')}</div>
-    ${won ? `<p style="font-family:'Caveat',cursive;font-size:22px;color:#4caf50;margin-bottom:10px">🎉 You got it!</p>` : ''}
-    ${lost ? `<p style="font-family:'Caveat',cursive;font-size:22px;color:var(--red);margin-bottom:10px">The word was: <b>${wCurrent}</b> 🥺</p>` : ''}
-    ${!won && !lost ? `<div class="word-input-row"><input class="word-input" id="wordInput" maxlength="1" placeholder="?" oninput="this.value=this.value.toUpperCase()" onkeydown="if(event.key==='Enter')guessLetter()"/><button class="small-btn" onclick="guessLetter()">Guess</button></div>` : ''}
-    <button class="small-btn" onclick="buildWord()">New Word</button>
-  `;
-  if (!won && !lost) { const inp = document.getElementById('wordInput'); if (inp) inp.focus(); }
-}
-function guessLetter() {
-  const inp = document.getElementById('wordInput'); if (!inp) return;
-  const letter = inp.value.trim().toUpperCase();
-  if (!letter || wGuessed.has(letter)) return;
-  wGuessed.add(letter);
-  if (!wCurrent.includes(letter)) wWrong++;
-  renderWord();
-}
-
-// ---- PUZZLE ----
-let puzzleState = [], puzzleSize = 3, puzzleMoves = 0;
-const puzzleGoal = [1,2,3,4,5,6,7,8,0]; // 0 = empty
-
-function buildPuzzle() {
-  puzzleMoves = 0;
-  puzzleState = [...puzzleGoal];
-  for (let i = puzzleState.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [puzzleState[i], puzzleState[j]] = [puzzleState[j], puzzleState[i]];
+  function pickQuiz(i) {
+    const q = quizData[quizIdx];
+    document.querySelectorAll('.quiz-opt').forEach(o => o.style.pointerEvents = 'none');
+    const opts = document.querySelectorAll('.quiz-opt');
+    if (q.correct === -1) { opts[i].style.borderColor = 'var(--gold)'; opts[i].style.background = '#fdf5e0'; }
+    else { if (i === q.correct) opts[i].classList.add('correct'); else { opts[i].classList.add('wrong'); opts[q.correct].classList.add('correct'); } }
+    setTimeout(() => { quizIdx++; renderQuiz(); }, 1000);
   }
-  while (!isSolvable(puzzleState)) {
+
+  // Word Game
+  const wordBank = [
+    { word: 'BIRTHDAY', hint: 'The reason we\'re here 🎂' },
+    { word: 'FLOWERS',  hint: 'Nature\'s gift 🌸' },
+    { word: 'SPARKLE',  hint: 'What you do ✨' },
+    { word: 'MAGICAL',  hint: 'Just like you 🌙' },
+    { word: 'BELOVED',  hint: 'You are so... 💕' },
+  ];
+  let wCurrent, wGuessed, wWrong;
+  function buildWord() {
+    const w = wordBank[Math.floor(Math.random()*wordBank.length)];
+    wCurrent = w.word; wGuessed = new Set(); wWrong = 0; renderWord();
+  }
+  function renderWord() {
+    const display = wCurrent.split('').map(c => wGuessed.has(c) ? c : '_').join(' ');
+    const won = wCurrent.split('').every(c => wGuessed.has(c));
+    const lost = wWrong >= 6;
+    const hint = wordBank.find(w => w.word === wCurrent).hint;
+    document.getElementById('gameContent').innerHTML = `
+      <h2>🔤 Guess the Word</h2>
+      <div class="word-display">${display}</div>
+      <div class="word-hint">${hint}</div>
+      <div class="word-guessed">Wrong: ${wWrong}/6 &nbsp; Used: ${[...wGuessed].join(' ')}</div>
+      ${won ? `<p style="font-family:'Caveat',cursive;font-size:22px;color:#4caf50;margin-bottom:10px">🎉 You got it!</p>` : ''}
+      ${lost ? `<p style="font-family:'Caveat',cursive;font-size:22px;color:var(--red);margin-bottom:10px">The word was: <b>${wCurrent}</b> 🥺</p>` : ''}
+      ${!won && !lost ? `<div class="word-input-row"><input class="word-input" id="wordInput" maxlength="1" placeholder="?" oninput="this.value=this.value.toUpperCase()" onkeydown="if(event.key==='Enter')guessLetter()"/><button class="small-btn" onclick="guessLetter()">Guess</button></div>` : ''}
+      <button class="small-btn" onclick="buildWord()">New Word</button>
+    `;
+    if (!won && !lost) { const inp = document.getElementById('wordInput'); if (inp) inp.focus(); }
+  }
+  function guessLetter() {
+    const inp = document.getElementById('wordInput'); if (!inp) return;
+    const letter = inp.value.trim().toUpperCase();
+    if (!letter || wGuessed.has(letter)) return;
+    wGuessed.add(letter);
+    if (!wCurrent.includes(letter)) wWrong++;
+    renderWord();
+  }
+
+  // Puzzle
+  let puzzleState = [], puzzleSize = 3, puzzleMoves = 0;
+  const puzzleGoal = [1,2,3,4,5,6,7,8,0];
+
+  function buildPuzzle() {
+    puzzleMoves = 0;
+    puzzleState = [...puzzleGoal];
     for (let i = puzzleState.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
       [puzzleState[i], puzzleState[j]] = [puzzleState[j], puzzleState[i]];
     }
+    while (!isSolvable(puzzleState)) {
+      for (let i = puzzleState.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [puzzleState[i], puzzleState[j]] = [puzzleState[j], puzzleState[i]];
+      }
+    }
+    renderPuzzle();
   }
-  renderPuzzle();
-}
 
-function isSolvable(arr) {
-  let inv = 0;
-  const flat = arr.filter(x => x !== 0);
-  for (let i = 0; i < flat.length; i++)
-    for (let j = i + 1; j < flat.length; j++)
-      if (flat[i] > flat[j]) inv++;
-  return inv % 2 === 0;
-}
+  function isSolvable(arr) {
+    let inv = 0;
+    const flat = arr.filter(x => x !== 0);
+    for (let i = 0; i < flat.length; i++)
+      for (let j = i + 1; j < flat.length; j++)
+        if (flat[i] > flat[j]) inv++;
+    return inv % 2 === 0;
+  }
 
-function renderPuzzle() {
-  const imgUrl = window._puzzleImageUrl;
-  const solved = puzzleState.every((v,i) => v === puzzleGoal[i]);
-  const gridSize = 300;
-  const cellSize = gridSize / puzzleSize;
+  function renderPuzzle() {
+    const solved = puzzleState.every((v,i) => v === puzzleGoal[i]);
+    const gridSize = 300;
+    const cellSize = gridSize / puzzleSize;
+    let piecesHTML = '';
+    puzzleState.forEach((val, idx) => {
+      const isEmpty = val === 0;
+      const correctClass = val !== 0 && puzzleState[idx] === puzzleGoal[idx] ? 'correct' : '';
+      piecesHTML += `<div class="puzzle-piece ${isEmpty ? 'empty' : ''} ${correctClass}"
+        style="width:${cellSize-3}px;height:${cellSize-3}px;background:${isEmpty ? '' : `hsl(${val*37},60%,75%)`};display:flex;align-items:center;justify-content:center;font-family:'Caveat',cursive;font-size:22px;color:#fff;font-weight:700;"
+        onclick="movePiece(${idx})">${isEmpty ? '' : val}</div>`;
+    });
+    document.getElementById('gameContent').innerHTML = `
+      <h2>🧩 Photo Puzzle</h2>
+      <div class="puzzle-wrap">
+        <div class="puzzle-info">Moves: <span id="puzzleMoves">${puzzleMoves}</span></div>
+        <div class="puzzle-grid" style="grid-template-columns:repeat(${puzzleSize},1fr);width:${gridSize}px;height:${gridSize}px;">${piecesHTML}</div>
+        ${solved ? `<p style="font-family:'Caveat',cursive;font-size:22px;color:#4caf50">🎉 Solved in ${puzzleMoves} moves!</p>` : ''}
+        <button class="small-btn" onclick="buildPuzzle()">Shuffle</button>
+      </div>
+    `;
+  }
 
-  let piecesHTML = '';
-  puzzleState.forEach((val, idx) => {
-    const isEmpty = val === 0;
-    const col = (val - 1) % puzzleSize;
-    const row = Math.floor((val - 1) / puzzleSize);
-    const bgPos = imgUrl && !isEmpty
-      ? `background-image:url('${imgUrl}');background-size:${gridSize}px ${gridSize}px;background-position:-${col*cellSize}px -${row*cellSize}px;`
-      : isEmpty ? '' : `background:hsl(${val*37},60%,75%);display:flex;align-items:center;justify-content:center;font-family:'Caveat',cursive;font-size:22px;color:#fff;font-weight:700;`;
-    const correctClass = val !== 0 && puzzleState[idx] === puzzleGoal[idx] ? 'correct' : '';
-    piecesHTML += `<div class="puzzle-piece ${isEmpty ? 'empty' : ''} ${correctClass}" 
-      style="width:${cellSize-3}px;height:${cellSize-3}px;${bgPos}" 
-      onclick="movePiece(${idx})">${(!imgUrl && !isEmpty) ? val : ''}</div>`;
-  });
-
-  document.getElementById('gameContent').innerHTML = `
-    <h2>🧩 Photo Puzzle</h2>
-    <div class="puzzle-wrap">
-      <div class="puzzle-info">Moves: <span id="puzzleMoves">${puzzleMoves}</span></div>
-      <div class="puzzle-grid" style="grid-template-columns:repeat(${puzzleSize},1fr);width:${gridSize}px;height:${gridSize}px;">${piecesHTML}</div>
-      ${solved ? `<p style="font-family:'Caveat',cursive;font-size:22px;color:#4caf50">🎉 Solved in ${puzzleMoves} moves!</p>` : ''}
-      <button class="small-btn" onclick="buildPuzzle()">Shuffle</button>
-    </div>
-  `;
-}
-
-function movePiece(idx) {
-  const emptyIdx = puzzleState.indexOf(0);
-  const size = puzzleSize;
-  const row = Math.floor(idx / size), col = idx % size;
-  const eRow = Math.floor(emptyIdx / size), eCol = emptyIdx % size;
-  const adjacent = (Math.abs(row - eRow) + Math.abs(col - eCol)) === 1;
-  if (!adjacent) return;
-  [puzzleState[idx], puzzleState[emptyIdx]] = [puzzleState[emptyIdx], puzzleState[idx]];
-  puzzleMoves++;
-  renderPuzzle();
-}
+  function movePiece(idx) {
+    const emptyIdx = puzzleState.indexOf(0);
+    const size = puzzleSize;
+    const row = Math.floor(idx / size), col = idx % size;
+    const eRow = Math.floor(emptyIdx / size), eCol = emptyIdx % size;
+    if ((Math.abs(row - eRow) + Math.abs(col - eCol)) !== 1) return;
+    [puzzleState[idx], puzzleState[emptyIdx]] = [puzzleState[emptyIdx], puzzleState[idx]];
+    puzzleMoves++;
+    renderPuzzle();
+  }
 </script>
 </body>
 </html>
