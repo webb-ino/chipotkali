@@ -327,7 +327,7 @@
 </head>
 <body>
 
-<!-- BGM audio -->
+<!-- BGM audio — plays in sync with the video -->
 <audio id="bgm" loop>
   <source src="bgm.mp3" type="audio/mpeg">
 </audio>
@@ -448,10 +448,9 @@
 
         <div class="memories-content locked" id="memoriesContent">
           <div class="single-video-wrap">
-            <!-- ✏️ Replace "vid1.mp4" with your video filename -->
             <video
               id="mainVideo"
-              src="https://drive.google.com/file/d/1wLlplxZD1JimhOxOX8O3kcNkBjn1T1AH/view?usp=drivesdk"
+              src="VN20260607_130550.mp4"
               controls
               playsinline
               preload="metadata"
@@ -556,9 +555,10 @@ Tomorrow I'll love you even more.* ❤️✨🥹</p>
   const bgm = document.getElementById('bgm');
   const mainVideo = document.getElementById('mainVideo');
 
-  // BGM syncs with the main video — plays when video plays, pauses when video pauses
+  // BGM syncs with the main video
   mainVideo.addEventListener('play', () => {
-    bgm.volume = 0.4;
+    bgm.currentTime = mainVideo.currentTime; // keep roughly in sync
+    bgm.volume = 0.45;
     bgm.play().catch(() => {});
   });
   mainVideo.addEventListener('pause', () => {
@@ -568,6 +568,10 @@ Tomorrow I'll love you even more.* ❤️✨🥹</p>
     bgm.pause();
     bgm.currentTime = 0;
   });
+  // Keep bgm time loosely synced during seeking
+  mainVideo.addEventListener('seeked', () => {
+    bgm.currentTime = mainVideo.currentTime;
+  });
 
   // Navigation
   function showPage(id) {
@@ -576,7 +580,7 @@ Tomorrow I'll love you even more.* ❤️✨🥹</p>
     if (id === 'page2') startTimer();
   }
 
-  // Timer
+  // Timer — set your target date here
   const TARGET = new Date('2026-05-05T00:00:00');
   let timerInterval = null;
 
